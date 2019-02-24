@@ -13,6 +13,7 @@ export const configFactory = (webpackEnv: "development" | "production"): webpack
   const isEnvProduction = webpackEnv === "production";
   return {
     mode: isEnvProduction ? "production" : "development",
+    bail: isEnvProduction,
     stats: "errors-only",
     entry: {
       index: paths.appIndexJs,
@@ -21,7 +22,7 @@ export const configFactory = (webpackEnv: "development" | "production"): webpack
     devtool: "cheap-module-source-map",
     output: {
       path: isEnvProduction ? paths.appBuild : undefined,
-      publicPath: paths.appBuild,
+      publicPath: isEnvProduction ? paths.servedPath : isEnvDevelopment && "/",
       chunkFilename: isEnvProduction ? "static/js/[name].[chunkhash:8].chunk.js" : isEnvDevelopment && "static/js/[name].chunk.js",
       filename: isEnvProduction ? "static/js/[name].[chunkhash:8].js" : isEnvDevelopment && "static/js/bundle.js",
       pathinfo: isEnvDevelopment,
@@ -57,7 +58,7 @@ export const configFactory = (webpackEnv: "development" | "production"): webpack
         defaultRules.styleLoader,
       ],
     },
-    plugins,
+    plugins: [plugins.ForkTsCheckerWebpackPlugin(), plugins.HtmlWebpackPlugin({ isEnvProduction }), plugins.MiniCssExtractPlugin],
     resolve: {
       extensions: moduleFileExtensions,
       alias: commonConfig.alias,

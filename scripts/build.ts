@@ -20,7 +20,7 @@ import * as webpack from "webpack";
 import { paths } from "./webpack/paths";
 import { configFactory } from "./webpack/webpack.config";
 const chalk = require("react-dev-utils/chalk");
-// const checkRequiredFiles = require("react-dev-utils/checkRequiredFiles");
+const checkRequiredFiles = require("react-dev-utils/checkRequiredFiles");
 const formatWebpackMessages = require("react-dev-utils/formatWebpackMessages");
 const printHostingInstructions = require("react-dev-utils/printHostingInstructions");
 const FileSizeReporter = require("react-dev-utils/FileSizeReporter");
@@ -37,9 +37,9 @@ const WARN_AFTER_CHUNK_GZIP_SIZE = 1024 * 1024;
 const isInteractive = process.stdout.isTTY;
 
 // Warn and crash if required files are missing
-// if (!checkRequiredFiles([paths.appHtml, paths.appIndexJs])) {
-//   process.exit(1);
-// }
+if (!checkRequiredFiles([paths.appHtml, paths.appIndexJs])) {
+  process.exit(1);
+}
 
 // Process CLI arguments
 const argv = process.argv.slice(2);
