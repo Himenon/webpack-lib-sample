@@ -1,6 +1,6 @@
 import * as MiniCssExtractPlugin from "mini-css-extract-plugin";
 import * as webpack from "webpack";
-import { paths } from "./paths";
+import { paths } from "../../config/paths";
 
 export const rules: { [key: string]: webpack.Rule } = {
   sourceMapLoader: {

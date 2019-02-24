@@ -1,16 +1,23 @@
 import * as path from "path";
 import * as webpack from "webpack";
+import { getClientEnvironment } from "../../config/env";
+import { moduleFileExtensions, paths } from "../../config/paths";
 import * as commonConfig from "./common";
 import { minimizerPluginMap } from "./optimization";
-import { moduleFileExtensions, paths } from "./paths";
 import { plugins } from "./plugins";
 import { rules as defaultRules } from "./rules";
 
 const shouldUseSourceMap = process.env.GENERATE_SOURCEMAP !== "false";
+const shouldInlineRuntimeChunk = process.env.INLINE_RUNTIME_CHUNK !== "false";
 
 export const configFactory = (webpackEnv: "development" | "production"): webpack.Configuration => {
   const isEnvDevelopment = webpackEnv === "development";
   const isEnvProduction = webpackEnv === "production";
+
+  const publicPath = isEnvProduction ? paths.servedPath : isEnvDevelopment && "/";
+  const publicUrl = isEnvProduction ? publicPath.slice(0, -1) : isEnvDevelopment && "";
+  const env = getClientEnvironment(publicUrl);
+
   return {
     mode: isEnvProduction ? "production" : "development",
     bail: isEnvProduction,
@@ -58,7 +65,15 @@ export const configFactory = (webpackEnv: "development" | "production"): webpack
         defaultRules.styleLoader,
       ],
     },
-    plugins: [plugins.ForkTsCheckerWebpackPlugin(), plugins.HtmlWebpackPlugin({ isEnvProduction }), plugins.MiniCssExtractPlugin],
+    plugins: [
+      plugins.ForkTsCheckerWebpackPlugin(),
+      plugins.HtmlWebpackPlugin({ isEnvProduction }),
+      isEnvProduction && shouldInlineRuntimeChunk && plugins.InlineChunkHtmlPlugin,
+      plugins.InterpolateHtmlPlugin(env),
+      // plugins.ModuleNotFoundPlugin(paths),
+      plugins.DefinePlugin(env),
+      plugins.MiniCssExtractPlugin(),
+    ].filter(Boolean),
     resolve: {
       extensions: moduleFileExtensions,
       alias: commonConfig.alias,
