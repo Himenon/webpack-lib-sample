@@ -17,7 +17,7 @@ import bfj from "bfj";
 import * as fs from "fs-extra";
 import * as path from "path";
 import * as webpack from "webpack";
-import { paths } from "./webpack/paths";
+import { paths } from "../config/paths";
 import { configFactory } from "./webpack/webpack.config";
 const chalk = require("react-dev-utils/chalk");
 const checkRequiredFiles = require("react-dev-utils/checkRequiredFiles");
