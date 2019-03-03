@@ -36,7 +36,7 @@
     "format": "prettier --config .prettierrc --write src/*.{ts,tsx}",
     "lint": "eslint -c ./.eslintrc.json 'src/**/*.{ts,tsx}'",
     "lint:fix": "yarn run lint -- --fix",
-    "server": "node ./lib/server.js",
+    "server:dev": "node scripts/develop.js",
     "server:prod": "serve -s build",
     "start": "yarn run develop",
     "test": "yarn run cruiser && yarn run test:jest",
@@ -79,6 +79,7 @@
     "@types/react-dev-utils": "^7.0.0",
     "@types/terser-webpack-plugin": "^1.2.1",
     "@types/webpack": "^4.4.25",
+    "@types/webpack-dev-server": "^3.1.2",
     "@types/webpack-manifest-plugin": "^2.0.0",
     "@typescript-eslint/eslint-plugin": "^1.4.1",
     "@typescript-eslint/eslint-plugin-tslint": "^1.4.1",
@@ -116,6 +117,7 @@
     "tslint-plugin-prettier": "^2.0.1",
     "typescript": "^3.3.3333",
     "webpack": "^4.29.5",
+    "webpack-dev-server": "^3.2.1",
     "webpack-manifest-plugin": "^2.0.4"
   }
 }
