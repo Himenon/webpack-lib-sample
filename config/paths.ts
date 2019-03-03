@@ -4,14 +4,14 @@ import * as url from "url";
 
 const appDirectory = fs.realpathSync(process.cwd());
 
-const resolveApp = relativePath => path.resolve(appDirectory, relativePath);
+const resolveApp = (relativePath: string) => path.resolve(appDirectory, relativePath);
 
 // tslint:disable-next-line:max-line-length
 export const moduleFileExtensions = [".mjs", ".web.ts", ".ts", ".web.tsx", ".tsx", ".web.js", ".js", ".json", ".web.jsx", ".jsx"];
 
 const envPublicUrl = process.env.PUBLIC_URL;
 
-function ensureSlash(inputPath, needsSlash) {
+function ensureSlash(inputPath: string, needsSlash: boolean) {
   const hasSlash = inputPath.endsWith("/");
   if (hasSlash && !needsSlash) {
     return inputPath.substr(0, inputPath.length - 1);
@@ -22,16 +22,16 @@ function ensureSlash(inputPath, needsSlash) {
   }
 }
 
-const getPublicUrl = appPackageJson => envPublicUrl || require(appPackageJson).homepage;
+const getPublicUrl = (appPackageJson: any): string => envPublicUrl || require(appPackageJson).homepage;
 
-function getServedPath(appPackageJson) {
+function getServedPath(appPackageJson: any) {
   const publicUrl = getPublicUrl(appPackageJson);
-  const servedUrl = envPublicUrl || (publicUrl ? url.parse(publicUrl).pathname : "/");
+  const servedUrl: string = envPublicUrl || (publicUrl ? url.parse(publicUrl).pathname : "/") || "/";
   return ensureSlash(servedUrl, true);
 }
 
 // Resolve file paths in the same order as webpack
-const resolveModule = (resolveFn, filePath) => {
+const resolveModule = (resolveFn: (relativePath: string) => string, filePath: string): string => {
   const extension = moduleFileExtensions.find(ext => fs.existsSync(resolveFn(`${filePath}.${ext}`)));
   if (extension) {
     return resolveFn(`${filePath}.${extension}`);
@@ -52,7 +52,7 @@ export const paths = {
   appTslint: resolveApp("tslint.json"),
   yarnLockFile: resolveApp("yarn.lock"),
   testsSetup: resolveModule(resolveApp, "src/setupTests"),
-  // proxySetup: resolveApp("src/setupProxy.js"),
+  proxySetup: resolveApp("src/setupProxy.js"),
   appNodeModules: resolveApp("node_modules"),
   publicUrl: getPublicUrl(resolveApp("package.json")),
   servedPath: getServedPath(resolveApp("package.json")),

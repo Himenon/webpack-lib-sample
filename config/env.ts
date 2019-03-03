@@ -11,7 +11,7 @@ if (!NODE_ENV) {
 }
 
 // https://github.com/bkeepers/dotenv#what-other-env-files-can-i-use
-const dotenvFiles = [
+const dotenvFiles: Array<string | false> = [
   `${paths.dotenv}.${NODE_ENV}.local`,
   `${paths.dotenv}.${NODE_ENV}`,
   // Don't include `.env.local` for `test` environment
@@ -27,7 +27,7 @@ const dotenvFiles = [
 // https://github.com/motdotla/dotenv
 // https://github.com/motdotla/dotenv-expand
 dotenvFiles.forEach(dotenvFile => {
-  if (fs.existsSync(dotenvFile)) {
+  if (dotenvFile && fs.existsSync(dotenvFile)) {
     require("dotenv-expand")(
       require("dotenv").config({
         path: dotenvFile,

@@ -1,9 +1,11 @@
 {
-  "automock": true,
+  "automock": false,
   "unmockedModulePathPatterns": ["<rootDir>/node_modules/*"],
   "roots": [
     "<rootDir>/src"
   ],
+  "testEnvironment": "jsdom",
+  "resolver": "jest-pnp-resolver",
   "globals": {
     "ts-jest": {
       "tsConfig": "tsconfig.json",

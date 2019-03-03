@@ -15,7 +15,7 @@ export const configFactory = (webpackEnv: "development" | "production"): webpack
   const isEnvProduction = webpackEnv === "production";
 
   const publicPath = isEnvProduction ? paths.servedPath : isEnvDevelopment && "/";
-  const publicUrl = isEnvProduction ? publicPath.slice(0, -1) : isEnvDevelopment && "";
+  const publicUrl = isEnvProduction && publicPath ? publicPath.slice(0, -1) : isEnvDevelopment && "";
   const env = getClientEnvironment(publicUrl);
 
   return {
@@ -29,13 +29,19 @@ export const configFactory = (webpackEnv: "development" | "production"): webpack
     devtool: "cheap-module-source-map",
     output: {
       path: isEnvProduction ? paths.appBuild : undefined,
-      publicPath: isEnvProduction ? paths.servedPath : isEnvDevelopment && "/",
-      chunkFilename: isEnvProduction ? "static/js/[name].[chunkhash:8].chunk.js" : isEnvDevelopment && "static/js/[name].chunk.js",
-      filename: isEnvProduction ? "static/js/[name].[chunkhash:8].js" : isEnvDevelopment && "static/js/bundle.js",
+      publicPath: isEnvProduction ? paths.servedPath : isEnvDevelopment ? "/" : undefined,
+      chunkFilename: isEnvProduction
+        ? "static/js/[name].[chunkhash:8].chunk.js"
+        : isEnvDevelopment
+        ? "static/js/[name].chunk.js"
+        : undefined,
+      filename: isEnvProduction ? "static/js/[name].[chunkhash:8].js" : isEnvDevelopment ? "static/js/bundle.js" : undefined,
       pathinfo: isEnvDevelopment,
       devtoolModuleFilenameTemplate: isEnvProduction
         ? info => path.relative(paths.appSrc, info.absoluteResourcePath).replace(/\\/g, "/")
-        : isEnvDevelopment && (info => path.resolve(info.absoluteResourcePath).replace(/\\/g, "/")),
+        : isEnvDevelopment
+        ? info => path.resolve(info.absoluteResourcePath).replace(/\\/g, "/")
+        : undefined,
     },
     optimization: {
       minimize: isEnvProduction,

@@ -9,9 +9,25 @@
 
 ## Usage
 
+### Setup
+
 ```sh
-yarn install
+yarn
+```
+
+### Development
+
+```sh
 yarn start
+```
+
+### Production Build
+
+```sh
+yarn run build:prod
+
+# check use http server
+serve -s build
 ```
 
 ## Update

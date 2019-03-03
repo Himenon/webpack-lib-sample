@@ -13,11 +13,11 @@ process.on("unhandledRejection", err => {
 
 // Ensure environment variables are read.
 
-import bfj from "bfj";
+const bfj = require("bfj");
 import * as fs from "fs-extra";
 import * as path from "path";
 import * as webpack from "webpack";
-import { paths } from "./webpack/paths";
+import { paths } from "../config/paths";
 import { configFactory } from "./webpack/webpack.config";
 const chalk = require("react-dev-utils/chalk");
 const checkRequiredFiles = require("react-dev-utils/checkRequiredFiles");
@@ -48,6 +48,12 @@ const writeStatsJson = argv.indexOf("--stats") !== -1;
 // Generate configuration
 const config = configFactory("production");
 
+interface ResolveArgs {
+  stats: webpack.Stats;
+  previousFileSizes: number;
+  warnings: string[];
+}
+
 // We require that you explicitly set browsers and do not fall back to
 // browserslist defaults.
 const { checkBrowsers } = require("react-dev-utils/browsersHelper");
@@ -57,7 +63,7 @@ checkBrowsers(paths.appPath, isInteractive)
     // This lets us display how much they changed later.
     return measureFileSizesBeforeBuild(paths.appBuild);
   })
-  .then(previousFileSizes => {
+  .then((previousFileSizes: number) => {
     // Remove all content but keep the directory so that
     // if you're in it, you don't end up in Trash
     fs.emptyDirSync(paths.appBuild);
@@ -67,7 +73,7 @@ checkBrowsers(paths.appPath, isInteractive)
     return build(previousFileSizes);
   })
   .then(
-    ({ stats, previousFileSizes, warnings }) => {
+    ({ stats, previousFileSizes, warnings }: ResolveArgs) => {
       if (warnings.length) {
         console.log(chalk.yellow("Compiled with warnings.\n"));
         console.log(warnings.join("\n\n"));
@@ -82,18 +88,18 @@ checkBrowsers(paths.appPath, isInteractive)
       console.log();
 
       const appPackage = require(paths.appPackageJson);
-      const publicUrl = paths.publicUrl;
-      const publicPath = config.output.publicPath;
-      const buildFolder = path.relative(process.cwd(), paths.appBuild);
+      const publicUrl: string = paths.publicUrl;
+      const publicPath: string = config.output ? config.output.publicPath || "" : "";
+      const buildFolder: string = path.relative(process.cwd(), paths.appBuild);
       printHostingInstructions(appPackage, publicUrl, publicPath, buildFolder, useYarn);
     },
-    err => {
+    (err: Error) => {
       console.log(chalk.red("Failed to compile.\n"));
       printBuildError(err);
       process.exit(1);
     },
   )
-  .catch(err => {
+  .catch((err: Error) => {
     if (err && err.message) {
       console.log(err.message);
     }
@@ -101,7 +107,7 @@ checkBrowsers(paths.appPath, isInteractive)
   });
 
 // Create the production build and print the deployment instructions.
-function build(previousFileSizes) {
+function build(previousFileSizes: number) {
   console.log("Creating an optimized production build...");
 
   const compiler = webpack(config);
@@ -134,7 +140,7 @@ function build(previousFileSizes) {
         return reject(new Error(messages.warnings.join("\n\n")));
       }
 
-      const resolveArgs = {
+      const resolveArgs: ResolveArgs = {
         stats,
         previousFileSizes,
         warnings: messages.warnings,
@@ -143,7 +149,7 @@ function build(previousFileSizes) {
         return bfj
           .write(paths.appBuild + "/bundle-stats.json", stats.toJson(), {})
           .then(() => resolve(resolveArgs))
-          .catch(error => reject(new Error(error)));
+          .catch((error: any) => reject(new Error(error)));
       }
 
       return resolve(resolveArgs);
