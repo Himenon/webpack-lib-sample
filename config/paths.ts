@@ -1,6 +1,5 @@
 import * as fs from "fs";
 import * as path from "path";
-import * as url from "url";
 
 const appDirectory = fs.realpathSync(process.cwd());
 
@@ -22,11 +21,8 @@ function ensureSlash(inputPath: string, needsSlash: boolean) {
   }
 }
 
-const getPublicUrl = (appPackageJson: any): string => envPublicUrl || require(appPackageJson).homepage;
-
-function getServedPath(appPackageJson: any) {
-  const publicUrl = getPublicUrl(appPackageJson);
-  const servedUrl: string = envPublicUrl || (publicUrl ? url.parse(publicUrl).pathname : "/") || "/";
+function getServedPath() {
+  const servedUrl: string = envPublicUrl || "/";
   return ensureSlash(servedUrl, true);
 }
 
@@ -54,6 +50,6 @@ export const paths = {
   testsSetup: resolveModule(resolveApp, "src/setupTests"),
   proxySetup: resolveApp("src/setupProxy.js"),
   appNodeModules: resolveApp("node_modules"),
-  publicUrl: getPublicUrl(resolveApp("package.json")),
-  servedPath: getServedPath(resolveApp("package.json")),
+  publicUrl: getServedPath(),
+  servedPath: getServedPath(),
 };
