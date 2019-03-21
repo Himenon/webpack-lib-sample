@@ -11,8 +11,6 @@ stages:
   if: branch = master AND type = pull_request
 - name: test
   if: branch = master AND type = pull_request
-- name: deploy
-  if: branch = master AND type = push
 jobs:
   include:
   - stage: lint
@@ -25,14 +23,5 @@ jobs:
     - '10'
   - stage: test
     script: yarn run test:ci
-    node_js:
-    - '10'
-  - stage: deploy
-    script:
-    - yarn install
-    - yarn build
-    - echo '//registry.npmjs.org/:_authToken="${NPM_TOKEN}"' >> .npmrc
-    - npm publish
-    - cp .npmrc.template .npmrc
     node_js:
     - '10'
