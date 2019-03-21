@@ -77,8 +77,12 @@
     "@typescript-eslint/eslint-plugin-tslint": "^1.4.1",
     "@typescript-eslint/parser": "^1.4.1",
     "autoprefixer": "^9.4.8",
+    "babel-loader": "^8.0.5",
+    "babel-plugin-named-asset-import": "^0.3.1",
+    "babel-preset-react-app": "^7.0.2",
     "bfj": "^6.1.1",
     "cache-loader": "^2.0.1",
+    "case-sensitive-paths-webpack-plugin": "^2.2.0",
     "codecov": "^3.2.0",
     "css-loader": "^2.1.0",
     "dependency-cruiser": "^4.13.2",
@@ -125,6 +129,7 @@
     "url-loader": "^1.1.2",
     "webpack": "^4.29.5",
     "webpack-dev-server": "^3.2.1",
-    "webpack-manifest-plugin": "^2.0.4"
+    "webpack-manifest-plugin": "^2.0.4",
+    "workbox-webpack-plugin": "^4.1.1"
   }
 }
