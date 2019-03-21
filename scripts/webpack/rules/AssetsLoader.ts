@@ -2,6 +2,7 @@ import * as webpack from "webpack";
 import { paths } from "../../../config/paths";
 const getCSSModuleLocalIdent = require("react-dev-utils/getCSSModuleLocalIdent");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const Fiber = require("fibers");
 
 // Source maps are resource heavy and can cause out of memory issue for large source files.
 const shouldUseSourceMap = process.env.GENERATE_SOURCEMAP !== "false";
@@ -15,7 +16,7 @@ const sassModuleRegex = /\.module\.(scss|sass)$/;
 interface CssOptions {
   importLoaders?: number;
   sourceMap?: boolean;
-  modules?: boolean;
+  modules: true;
   getLocalIdent?: any;
 }
 
@@ -38,7 +39,11 @@ export const generateRule = ({
       },
       {
         loader: require.resolve("css-loader"),
-        options: cssOptions,
+        options: {
+          ...cssOptions,
+          camelCase: true,
+          localIdentName: "___[local]___[hash:base64:5]",
+        },
       },
       {
         // Options for PostCSS as we reference these options twice
@@ -66,7 +71,9 @@ export const generateRule = ({
       loaders.push({
         loader: require.resolve(preProcessor),
         options: {
+          implementation: require("sass"),
           sourceMap: isEnvProduction && shouldUseSourceMap,
+          fiber: Fiber,
         },
       });
     }
@@ -152,6 +159,7 @@ export const generateRule = ({
         use: getStyleLoaders({
           importLoaders: 1,
           sourceMap: isEnvProduction && shouldUseSourceMap,
+          modules: true,
         }),
         // Don't consider CSS imports dead code even if the
         // containing package claims to have no side effects.
@@ -180,6 +188,7 @@ export const generateRule = ({
           {
             importLoaders: 2,
             sourceMap: isEnvProduction && shouldUseSourceMap,
+            modules: true,
           },
           "sass-loader",
         ),
