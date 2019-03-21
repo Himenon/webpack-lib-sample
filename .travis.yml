@@ -22,6 +22,8 @@ jobs:
     node_js:
     - '10'
   - stage: test
-    script: yarn run test:ci
+    script:
+    - yarn run build:scripts
+    - yarn run test:ci
     node_js:
     - '10'
