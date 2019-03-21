@@ -28,7 +28,6 @@ export const generateRule = (): webpack.Rule => {
           localIdentName: "___[local]___[hash:base64:5]",
         },
       },
-      "resolve-url-loader",
       {
         loader: "postcss-loader",
         options: {

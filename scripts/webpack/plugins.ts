@@ -29,7 +29,7 @@ export const plugins = {
         basedir: paths.appNodeModules,
       }),
       async: isEnvDevelopment,
-      // useTypescriptIncrementalApi: true,
+      useTypescriptIncrementalApi: true,
       checkSyntacticErrors: true,
       tsconfig: paths.appTsConfig,
       reportFiles: ["**", "!**/*.json", "!**/__tests__/**", "!**/?(*.)(spec|test).*", "!**/src/setupProxy.*", "!**/src/setupTests.*"],

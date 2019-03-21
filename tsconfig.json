@@ -24,7 +24,7 @@
     "baseUrl": "./",
     "noLib": false,
     "declaration": true,
-    "jsx": "preserve"
+    "jsx": "react"
   },
   "include": [
     "src/**/*.ts",
