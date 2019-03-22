@@ -1,11 +1,11 @@
 import * as React from "react";
 const styles = require("./style.scss");
 
-export interface HelloWorldProps {
+interface HelloWorldProps {
   name: string;
 }
 
-export class HelloWorld extends React.Component<HelloWorldProps, { count: number }> {
+class HelloWorld extends React.Component<HelloWorldProps, { count: number }> {
   constructor(props: HelloWorldProps) {
     super(props);
     this.state = {
