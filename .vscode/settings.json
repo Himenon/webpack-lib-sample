@@ -1,7 +1,7 @@
 {
   "files.exclude": {
     "src/**/*.js*": true,
-    "scripts/**/*.js*": false,
+    "scripts/**/*.js*": true,
     "config/**/*.js*": true
   }
 }
