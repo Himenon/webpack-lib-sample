@@ -1,4 +1,4 @@
-# sample
+# webpack-lib-sample
 
 [![npm version](https://badgen.net/npm/v/sample)](https://npm.im/sample)
 [![Build Status](https://travis-ci.com/.svg?branch=master)](https://travis-ci.com/)
